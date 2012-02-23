@@ -30,8 +30,8 @@ utility_name = nil
 cron_interval_minute = nil #If this is not set your data will NOT be indexed
 
 schedule_indexing = true
-cron_minute       = '*'
-cron_hour         = '2'
+cron_minute       = '0,5,10,15,20,25,30,35,40,45,50,55'
+cron_hour         = '*'
 cron_day_of_month = '*'
 cron_month        = '*'
 cron_day_of_week  = '*'
