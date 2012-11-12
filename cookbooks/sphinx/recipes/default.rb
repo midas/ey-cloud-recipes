@@ -31,7 +31,7 @@ cron_interval_minute = nil #If this is not set your data will NOT be indexed
 
 schedule_indexing = true
 cron_minute       = '*'
-cron_hour         = '2'
+cron_hour         = '0,6,18'
 cron_day_of_month = '*'
 cron_month        = '*'
 cron_day_of_week  = '*'
