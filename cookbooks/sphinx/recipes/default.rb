@@ -4,7 +4,7 @@
 #
 
 # Set your application name here
-appname = "myapp"
+appname = "archivalock"
 
 # Uncomment the flavor of sphinx you want to use
 flavor = "thinking_sphinx"
@@ -27,7 +27,14 @@ utility_name = nil
 # If you don't want scheduled reindexes, just leave this set to nil.
 # Setting it equal to 10 would run the cron job every 10 minutes.
 
-cron_interval = nil #If this is not set your data will NOT be indexed
+cron_interval_minute = nil #If this is not set your data will NOT be indexed
+
+schedule_indexing = true
+cron_minute       = '*'
+cron_hour         = '0,6,18'
+cron_day_of_month = '*'
+cron_month        = '*'
+cron_day_of_week  = '*'
 
 if utility_name
   sphinx_host = node[:utility_instances].find {|u| u[:name] == utility_name }[:hostname]
@@ -53,7 +60,8 @@ if utility_name
           :app_name => app_name,
           :address => sphinx_host,
           :user => node[:owner_name],
-          :mem_limit => '32M'
+          :mem_limit => '32M',
+          :max_matches => 5000
         })
       end
     end
@@ -119,10 +127,10 @@ if utility_name
         })
       end
 
-      gem_package "bundler" do 
-        source "http://rubygems.org" 
-        action :install 
-        version "1.0.21" 
+      gem_package "bundler" do
+        source "http://rubygems.org"
+        action :install
+        version "1.0.21"
       end
 
       execute "sphinx config" do
@@ -151,14 +159,14 @@ if utility_name
 
       execute "monit reload"
 
-      if cron_interval
+      if schedule_indexing
         cron "sphinx index" do
           action  :create
-          minute  "*/#{cron_interval}"
-          hour    '*'
-          day     '*'
-          month   '*'
-          weekday '*'
+          minute  cron_minute
+          hour    cron_hour
+          day     cron_day_of_month
+          month   cron_month
+          weekday cron_day_of_week
           command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
           user node[:owner_name]
         end
@@ -227,10 +235,10 @@ else
         })
       end
 
-      gem_package "bundler" do 
-        source "http://rubygems.org" 
-        action :install 
-        version "1.0.21" 
+      gem_package "bundler" do
+        source "http://rubygems.org"
+        action :install
+        version "1.0.21"
       end
 
 
@@ -260,14 +268,14 @@ else
 
       execute "monit reload"
 
-      if cron_interval
+      if schedule_indexing
         cron "sphinx index" do
           action  :create
-          minute  "*/#{cron_interval}"
-          hour    '*'
-          day     '*'
-          month   '*'
-          weekday '*'
+          minute  cron_minute
+          hour    cron_hour
+          day     cron_day_of_month
+          month   cron_month
+          weekday cron_day_of_week
           command "cd /data/#{app_name}/current && RAILS_ENV=#{node[:environment][:framework_env]} bundle exec rake #{flavor}:index"
           user node[:owner_name]
         end
