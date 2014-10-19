@@ -61,7 +61,7 @@ if utility_name
           :address => sphinx_host,
           :user => node[:owner_name],
           :mem_limit => '32M',
-          :max_matches => 5000
+          :max_matches => 500000
         })
       end
     end
